@@ -31,7 +31,7 @@ SignUp_form = """
                     <label>User Name:</label>
                 </td>
                 <td>
-                    <input type="text" name="username"/>
+                    <input type="text" name="username" value="{0}"/>
                     <span class="error"></span>
                 </td>
             </tr>
@@ -56,7 +56,7 @@ SignUp_form = """
                     <label>E-mail Address:</label>
                 </td>
                 <td>
-                    <input type="text" name="email"/>
+                    <input type="text" name="email" value="{1}"/>
                     <span class="error"></span>
                 </td>
             </tr>
@@ -81,7 +81,7 @@ def valid_email(email):
 
 class Index(webapp2.RequestHandler):
     def get(self):
-        response = page_header + SignUp_form + page_footer
+        response = page_header + SignUp_form.format("","") + page_footer
         self.response.write(response)
 
     def post(self):
@@ -106,7 +106,7 @@ class Index(webapp2.RequestHandler):
             params["error_email"] = "That's not a valid e-mail"
             have_error = True
         if have_error:
-            response = page_header + SignUp_form + page_footer
+            response = page_header + SignUp_form.format(username, email) + page_footer
             self.response.write(response)
         else:
             self.redirect("/welcome?username=" + username)
