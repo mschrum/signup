@@ -32,7 +32,7 @@ SignUp_form = """
                 </td>
                 <td>
                     <input type="text" name="username" value="{0}"/>
-                    <span class="error"></span>
+                    <span class="error">{2}</span>
                 </td>
             </tr>
             <tr>
@@ -41,7 +41,7 @@ SignUp_form = """
                 </td>
                 <td>
                     <input type="password" name="password"/>
-                    <span class="error"></span>
+                    <span class="error" >{3}</span>
                 </td>
             </tr>
                 <td>
@@ -49,7 +49,7 @@ SignUp_form = """
                 </td>
                 <td>
                     <input type="password" name="verify"/>
-                    <span class="error"></span>
+                    <span class="error">{4}</span>
                 </td>
             </tr>
                 <td>
@@ -57,7 +57,7 @@ SignUp_form = """
                 </td>
                 <td>
                     <input type="text" name="email" value="{1}"/>
-                    <span class="error"></span>
+                    <span class="error">{5}</span>
                 </td>
             </tr>
                 <td>
@@ -81,7 +81,7 @@ def valid_email(email):
 
 class Index(webapp2.RequestHandler):
     def get(self):
-        response = page_header + SignUp_form.format("","") + page_footer
+        response = page_header + SignUp_form.format("","","","","","") + page_footer
         self.response.write(response)
 
     def post(self):
@@ -90,23 +90,26 @@ class Index(webapp2.RequestHandler):
         password = self.request.get("password")
         verify = self.request.get("verify")
         email = self.request.get("email")
-
+        error_user = ""
+        error_password = ""
+        error_verify = ""
+        error_email = ""
         params = dict(username = username, email = email)
 
         if not valid_username(username):
-            params["error_username"] = "That's not a valid Username."
+            error_user = "That's not a valid Username."
             have_error = True
         if not valid_password(password):
-            params["error_password"] = "That's not a valid password."
+            error_password = "That's not a valid password."
             have_error = True
         elif password != verify:
-            params["error_verify"] = "Your passwords didn't match."
+            error_verify = "Your passwords didn't match."
             have_error = True
         if not valid_email(email):
-            params["error_email"] = "That's not a valid e-mail"
+            error_email = "That's not a valid e-mail"
             have_error = True
         if have_error:
-            response = page_header + SignUp_form.format(username, email) + page_footer
+            response = page_header + SignUp_form.format(username, email, error_user, error_password, error_verify, error_email) + page_footer
             self.response.write(response)
         else:
             self.redirect("/welcome?username=" + username)
