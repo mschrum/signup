@@ -86,10 +86,10 @@ class Index(webapp2.RequestHandler):
 
     def post(self):
         have_error = False
-        username = self.request.get("username")
-        password = self.request.get("password")
-        verify = self.request.get("verify")
-        email = self.request.get("email")
+        username = cgi.escape(self.request.get("username"))
+        password = cgi.escape(self.request.get("password"))
+        verify = cgi.escape(self.request.get("verify"))
+        email = cgi.escape(self.request.get("email"))
         error_user = ""
         error_password = ""
         error_verify = ""
